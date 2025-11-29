@@ -47,7 +47,7 @@ const AboutPage = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
       { 
         name: 'Advance Kit', 
         link: 'https://id.shp.ee/VYS4ps1',
-        image: '/advance.jpg'
+        image: '/advence.jpg'
       }
     ],
   };
@@ -56,12 +56,12 @@ const AboutPage = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
     <div className="bg-white shadow-md rounded-2xl overflow-hidden transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(13,148,136,0.2)] duration-300 flex flex-col">
       <div className="relative h-48 w-full bg-gradient-to-br from-teal-100 to-cyan-100">
         <img 
-          src={product.image || '/dump.png'} 
+          src={product.image || '/advence.png'} 
           alt={product.name} 
           className="w-full h-full object-cover"
           onError={(e) => {
             // Fallback jika gambar tidak ditemukan
-            e.target.src = '/dump.png';
+            e.target.src = '/advence.png';
           }}
         />
       </div>

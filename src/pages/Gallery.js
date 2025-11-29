@@ -9,6 +9,9 @@ const Gallery = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
   const [preview, setPreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
+  // Modal Detail
+  const [selectedPost, setSelectedPost] = useState(null);
+
   // 🔹 Fetch gallery posts dari Supabase
   const fetchGallery = async () => {
     const { data, error } = await supabaseService.getGalleryPosts();
@@ -43,7 +46,10 @@ const Gallery = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
       setIsUploading(true);
 
       const fileName = `${Date.now()}_${newImage.name}`;
-      const { error: uploadError } = await supabaseService.uploadGalleryImage(fileName, newImage);
+      const { error: uploadError } = await supabaseService.uploadGalleryImage(
+        fileName,
+        newImage
+      );
       if (uploadError) throw uploadError;
 
       const { publicUrl } = supabaseService.getPublicImageUrl(fileName);
@@ -54,10 +60,12 @@ const Gallery = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
         created_at: new Date().toISOString(),
       };
 
-      const { error: insertError } = await supabaseService.addGalleryPost(newPost);
+      const { error: insertError } =
+        await supabaseService.addGalleryPost(newPost);
+
       if (insertError) throw insertError;
 
-      await fetchGallery(); // ⏱️ refresh otomatis setelah upload
+      await fetchGallery();
 
       setNewCaption("");
       setNewImage(null);
@@ -75,8 +83,8 @@ const Gallery = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
   const handleDelete = async (id) => {
     if (!window.confirm("Yakin mau hapus karya ini? 😢")) return;
     try {
-      await supabaseService.deleteUserAnswer(id); // panggil function delete dari service
-      await fetchGallery(); // refresh data
+      await supabaseService.deleteUserAnswer(id);
+      await fetchGallery();
       alert("Karya berhasil dihapus 🗑️");
     } catch (error) {
       console.error("Gagal menghapus:", error);
@@ -161,7 +169,8 @@ const Gallery = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
             {posts.map((post) => (
               <div
                 key={post.id}
-                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all overflow-hidden relative"
+                onClick={() => setSelectedPost(post)}
+                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all overflow-hidden relative cursor-pointer"
               >
                 <img
                   src={post.image_url}
@@ -172,8 +181,12 @@ const Gallery = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
                   <p className="text-gray-700 mb-2">{post.caption}</p>
                   <p className="text-sm text-gray-400">oleh Anonim 🎭</p>
                 </div>
+
                 <button
-                  onClick={() => handleDelete(post.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(post.id);
+                  }}
                   className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 transition"
                 >
                   Hapus
@@ -183,6 +196,38 @@ const Gallery = ({ setCurrentView, setShowPasswordModal, companyInfo }) => {
           </div>
         )}
       </div>
+
+      {/* MODAL DETAIL */}
+      {selectedPost && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-6 z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg">
+            <div className="flex justify-between items-start mb-4">
+              <h2 className="text-xl font-bold text-teal-800">Detail Karya</h2>
+              <button
+                onClick={() => setSelectedPost(null)}
+                className="text-teal-500 hover:text-teal-700 text-3xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+
+            <img
+              src={selectedPost.image_url}
+              alt={selectedPost.caption}
+              className="w-full rounded-xl mb-6 shadow-md object-cover max-h-96"
+            />
+
+            <p className="text-gray-700 text-lg mb-4 leading-relaxed">
+              {selectedPost.caption}
+            </p>
+
+            <p className="text-sm text-gray-500">
+              Diunggah pada:{" "}
+              {new Date(selectedPost.created_at).toLocaleString()}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

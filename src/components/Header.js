@@ -13,7 +13,8 @@ const Header = ({
     { key: 'home', label: 'Home' },
     { key: 'about', label: 'Products' },
     { key: 'articles', label: 'Artikel' },
-    { key: 'gallery', label: 'Galeri Karya' }, // 🟢 menu baru
+    { key: 'gallery', label: 'Galeri Karya' }, 
+        { key: 'profil', label: 'Profile' },// 🟢 menu baru
   ];
 
   const handleNavClick = (key) => {
