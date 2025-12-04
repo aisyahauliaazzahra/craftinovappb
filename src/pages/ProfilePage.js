@@ -1,5 +1,5 @@
 // src/pages/ProfilePage.js
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Header from "../components/Header";
 
 export default function ProfilePage({ 
@@ -8,115 +8,94 @@ export default function ProfilePage({
   companyInfo 
 }) {
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [about, setAbout] = useState("");
-  const [profilePic, setProfilePic] = useState("");
-
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("user_profile"));
-    if (saved) {
-      setName(saved.name || "");
-      setEmail(saved.email || "");
-      setAbout(saved.about || "");
-      setProfilePic(saved.profilePic || "");
-    }
-  }, []);
-
-  const handleSave = () => {
-    const data = { name, email, about, profilePic };
-    localStorage.setItem("user_profile", JSON.stringify(data));
-    alert("Profil berhasil disimpan!");
-  };
-
-  const handlePictureChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setProfilePic(event.target.result);
-    };
-    reader.readAsDataURL(file);
+  const info = {
+    name: "CraftInova",
+    tagline: "Temukan ketenangan lewat kreativitas",
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-100">
       {/* HEADER */}
       <Header
-        companyInfo={companyInfo}
+        companyInfo={companyInfo || info}
         setCurrentView={setCurrentView}
         setShowPasswordModal={setShowPasswordModal}
         activeView="profile"
       />
 
-      <div className="max-w-4xl mx-auto px-6 py-12">
-
+      <div className="max-w-4xl mx-auto px-6 py-16">
         {/* TITLE */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Profil Pengguna</h2>
-          <p className="text-xl text-gray-600">Kelola informasi pribadi Anda</p>
+          <h2 className="text-4xl font-bold text-teal-800 mb-4">
+            Tentang CraftInova
+          </h2>
+          <p className="text-gray-600 text-lg">
+            Website kreatif untuk mengekspresikan diri dan menemukan ketenangan
+          </p>
         </div>
 
-        {/* PROFILE CARD */}
-        <div className="bg-gradient-to-br from-teal-50 to-cyan-100 rounded-xl shadow-sm border p-8">
+        {/* ABOUT CARD */}
+        <div className="bg-white rounded-2xl shadow-md border p-10 leading-relaxed text-gray-700">
 
-          {/* Profile Picture */}
-          <div className="flex items-center mb-8">
+          {/* FOTO PEMBUAT */}
+          <div className="flex flex-col items-center mb-10">
             <img
-              className="w-28 h-28 rounded-full object-cover border border-gray-300 mr-6"
-              src={profilePic || "https://via.placeholder.com/150"}
-              alt="Profile"
+              src="/logocraftinova.png"   
+              alt="Foto Pembuat"
+              className="w-44 h-44 rounded-full object-cover shadow-md border"
             />
+            <p className="text-sm text-gray-500 mt-3 italic">
+              Aisyah Aulia Azzahra Putri
+            </p>
 
-            <div>
-              <label className="text-sm text-teal-700 font-medium">
-                Ganti Foto Profil
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePictureChange}
-                className="block mt-2"
-              />
-            </div>
-          </div>
-
-          {/* FORM */}
-          <div>
-            <label className="font-semibold text-gray-700">Nama</label>
-            <input
-              type="text"
-              className="w-full p-3 border rounded-lg mt-1 mb-4"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-
-            <label className="font-semibold text-gray-700">Email</label>
-            <input
-              type="email"
-              className="w-full p-3 border rounded-lg mt-1 mb-4"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <label className="font-semibold text-gray-700">Tentang Saya</label>
-            <textarea
-              className="w-full p-3 border rounded-lg mt-1 mb-6"
-              rows="4"
-              value={about}
-              onChange={(e) => setAbout(e.target.value)}
-            ></textarea>
-
-            <button
-              onClick={handleSave}
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-lg font-semibold transition-all"
+            {/* LINKEDIN */}
+            <a
+              href="https://www.linkedin.com/in/aisyah-aulia-azzahra-putri-588887311/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-2 text-teal-700 hover:text-teal-900 transition font-semibold"
             >
-              Simpan Profil
-            </button>
+              <span className="text-xl">🔗</span> 
+              <span>LinkedIn: Aisyah Aulia Azzahra Putri</span>
+            </a>
           </div>
-        </div>
 
+          <h3 className="text-2xl font-semibold text-teal-700 mb-4">
+            👤 Pembuat Website
+          </h3>
+          <p className="text-lg mb-6 text-gray-700">
+            Website <strong>CraftInova</strong> dibuat oleh:
+            <br />
+            <span className="font-bold text-teal-700">
+              Aisyah Aulia Azzahra Putri
+            </span>
+            <br />
+            NIM: <strong>21120123120041</strong>
+          </p>
+
+          <h3 className="text-2xl font-semibold text-teal-700 mb-4">
+            💡 Teknologi yang Digunakan
+          </h3>
+          <ul className="list-disc pl-6 text-lg space-y-2 mb-6">
+            <li>Dibangun menggunakan bahasa <strong>JavaScript</strong>.</li>
+            <li>Dilengkapi fitur <strong>PWA (Progressive Web App)</strong>.</li>
+            <li>Backend & database menggunakan <strong>Supabase</strong>.</li>
+          </ul>
+
+          <h3 className="text-2xl font-semibold text-teal-700 mb-4">
+            🗂️ Fungsi Supabase di CraftInova
+          </h3>
+          <ul className="list-disc pl-6 text-lg space-y-2">
+            <li>Menyimpan jawaban user dari kuisioner.</li>
+            <li>Menyimpan hasil karya yang diupload user.</li>
+            <li>Digunakan sebagai API utama untuk pengelolaan data.</li>
+          </ul>
+
+          <p className="text-lg mt-6">
+            CraftInova hadir sebagai platform kreatif yang mendorong relaksasi,
+            eksplorasi seni, dan pengalaman yang mudah diakses untuk semua orang.
+          </p>
+        </div>
       </div>
     </div>
   );
